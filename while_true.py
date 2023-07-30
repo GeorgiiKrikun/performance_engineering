@@ -10,6 +10,13 @@ def sigint_handler(signum, frame):
 
 signal.signal(signal.SIGTSTP, sigint_handler)
 
+def pure_function(i: int) -> int:
+    return i**2
+
+a=[pure_function(i) for i in range(10)]
+
+print(a)
+
 while True: 
     if event_1_happened: 
         callback1()
@@ -17,5 +24,6 @@ while True:
     elif event_2_happened:
         callback2()
         event_2_happened = False
-    sleep_until_next_event_arrives()
+    
+
 

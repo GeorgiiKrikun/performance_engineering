@@ -2,9 +2,16 @@ from flask import Flask, jsonify
 import multiprocessing as mp
 app = Flask(__name__)
 
+@app.route('/api', methods=['GET'])
+def get_data():
+    data = {
+        'message': 'Hello, world!',
+        'status': 'success'
+    }
+    return jsonify(data)
+
 @app.route('/long_task', methods=['GET'])
 def long_task():
-    
     data = {
         'message': 'Long_task completer!',
         'status': 'success',

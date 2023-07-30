@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <chrono>
+#include <iostream>
 
 // sudo perf record -e LLC-loads,LLC-load-misses ./a.out
 // sudo perf report -M intel -n --stdio
@@ -19,15 +20,14 @@ int main(void)
     for (uint64_t i = 0; i < max; ++i)
         arr[i] = ~i;
 
-
     auto start = std::chrono::high_resolution_clock::now();
     for(unsigned c = 0; c < cycles; ++c)
         for (uint64_t i = 0; i < max; i += step)
             acu += arr[i];
     auto end = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count();
-    printf("%lu\n", elapsed);
-    printf("%lu\n", max);
+    std::cout << "Elapsed time: " << elapsed << " ms\n";
+    
 
     return 0;
 }

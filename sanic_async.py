@@ -2,8 +2,6 @@ from flask import Flask, jsonify
 from sanic import Sanic
 from sanic.response import json
 import aiohttp
-import asyncio
-import time
 
 app = Flask(__name__)
 sanic_app = Sanic(__name__)

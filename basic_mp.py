@@ -42,6 +42,16 @@ if __name__ == '__main__':
     end = time.monotonic()
 
     print(f'Time to put {args.n_lists} lists into queue: {end-start}' )
+
+
+def do_something():
+    for i in range(1000000):
+        pass
+
+start = time.monotonic()
+do_something()
+# Oh no context switch
+end = time.monotonic()
     
 
 
