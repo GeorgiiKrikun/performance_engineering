@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-import nvtx
 size = 1000
 input_len = 10
 
@@ -16,24 +15,23 @@ print(M_list[0])
 
 # sudo -E nsys profile -t nvtx,osrt,cuda --force-overwrite=true --stats=true --output=outfile_list python3 nsight.py
 
-@nvtx.annotate("eigen_values", color="red")
 def eigen_values(M):
-    with nvtx.annotate("numpy_to_torch", color="yellow"):
-        M = torch.from_numpy(M)
-        M = M.cuda()
-    with nvtx.annotate("eigen_values_computation", color="blue"):
-        eigenvalues, _ = torch.eig(M)
-    with nvtx.annotate("eigen_values_sort",color="green"):
-        sorted_indices = eigenvalues[:, 0].argsort()
-        sorted_eigenvalues = eigenvalues[sorted_indices]
-    with nvtx.annotate("eigen_values_to_cpu", color="orange"):
-        sorted_eigenvalues_cpu = sorted_eigenvalues.cpu()
+    M = torch.from_numpy(M)
+    M = M.cuda()
+    eigenvalues, _ = torch.eig(M)
+    sorted_indices = eigenvalues[:, 0].argsort()
+    sorted_eigenvalues = eigenvalues[sorted_indices]
+    sorted_eigenvalues_cpu = sorted_eigenvalues.cpu()
     eigen_values_np = np.array(sorted_eigenvalues_cpu[:,0]).tolist()
     return eigen_values_np
 
 # print(eigen_values(M_list[0]))
 for i in range(input_len):
-    eigen_values(M_list[i])
+    out = eigen_values(M_list[i])
+    out_list_int = [int(round(x,0)) for x in out]
+    compare_list = [i for i in range(1, size+1)]
+    zeros_list = [x - y for x, y in zip(out_list_int, compare_list)]
+    assert all([x == 0 for x in zeros_list])
 
 
 

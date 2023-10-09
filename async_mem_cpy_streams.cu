@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     const uint n_tries = 50;
     int *a_host;
     int **a_dev;
-    
+
     a_host = (int *) malloc(size*sizeof(int)*n_tries);
     a_dev = (int **) malloc(3*sizeof(int*));
     for (int i = 0; i < 3; ++i) {
@@ -43,11 +43,6 @@ int main(int argc, char** argv) {
     // gpuErrchk(cudaHostAlloc((void** ) &a, size*sizeof(int), cudaHostAllocDefault));
     for (int i = 0; i < n_tries+2; ++i ) {
         std::cout << "Try " << i << std::endl;
-        // gpuErrchk(cudaMemcpy(a_dev, a_host+size*i, size*sizeof(int), cudaMemcpyHostToDevice));
-        // fastTask<<<size/32, 32>>>(a_dev);
-        // gpuErrchk(cudaPeekAtLastError());
-        // gpuErrchk(cudaDeviceSynchronize());
-        // gpuErrchk(cudaMemcpy(a_host+size*i, a_dev, size*sizeof(int), cudaMemcpyDeviceToHost));
         if (i >=0 && i < n_tries) {
             cudaStream_t& HD_stream = s[i%3];
             gpuErrchk(cudaMemcpyAsync(a_dev[i%3], a_host+size*i, size*sizeof(int), cudaMemcpyHostToDevice, HD_stream));
